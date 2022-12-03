@@ -10,6 +10,7 @@ public class Zone {
     private final Integer maxAmountOfFood = 100;
     private List<Animal> listOfAnimals;
 
+
     public Zone(String name) {
         this.name = name;
         amountOfFood = 0;
@@ -29,6 +30,21 @@ public class Zone {
     public List<Animal> getListOfAnimals() { return listOfAnimals; }
 
     public void setListOfAnimals(List<Animal> listOfAnimals) { this.listOfAnimals = listOfAnimals; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass())
+            return false;
+
+        Zone zone = (Zone) obj;
+        if (zone.getName().equals(this.name)) {
+            return true;
+        }
+        return false;
+    }
 
 
     public void addAnimal(Animal animal) {

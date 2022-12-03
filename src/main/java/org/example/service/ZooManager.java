@@ -56,12 +56,17 @@ public class ZooManager {
         Scanner input = new Scanner(System.in);
         while (input.hasNextInt()) {
             if (input.nextInt() == 1) {
+                System.out.println("Write a name of a new zone:");
                 zooService.addZone();
+                System.out.println("The new zone was created.");
             } else if (input.nextInt() == 2) {
+                System.out.println("Write a species and name of a new animal, for example: lion,Simba");
                 zooService.addAnimal();
+                System.out.println("You have new animal at the Zoo.");
             } else if (input.nextInt() == 3) {
                 showAnimalsWithoutZone();
             } else if (input.nextInt() == 4) {
+                System.out.println("Write animal which you want to assign and the zone, eg. lion,Simba,savanna");
                 zooService.assignAnimalToZone();
             } else if (input.nextInt() == 5 ) {
                 getStateOfTheZoo();

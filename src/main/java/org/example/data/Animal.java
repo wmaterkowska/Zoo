@@ -5,12 +5,12 @@ public class Animal {
     private String species;
     private String name;
     private Integer amountOfFood;
-
     private Zone zone;
 
     public Animal(String species, String name) {
         this.species = species;
         this.name = name;
+        this.amountOfFood = 0;
     }
 
 
@@ -29,4 +29,20 @@ public class Animal {
     public Zone getZone() { return zone; }
 
     public void setZone(Zone zone) { this.zone = zone; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass())
+            return false;
+
+        Animal animal = (Animal) obj;
+        if (animal.getSpecies().equals(this.species) && animal.getName().equals(this.name)) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -10,6 +10,7 @@ public class Main {
         ZooManager manager = new ZooManager(zoo);
 
         manager.welcome();
+
         manager.getStateOfTheZoo();
         manager.mangingTheZoo();
         manager.getStateOfTheZoo();
