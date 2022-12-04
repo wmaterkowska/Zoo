@@ -1,29 +1,19 @@
-package org.example.data;
+package org.github.wmaterkowska.zoo.model;
+
+import org.github.wmaterkowska.zoo.model.animals.Animal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Zoo {
-    private Integer numberOfZones;
-    private Integer numberOfAnimals;
     private List<Zone> listOfZones;
     private List<Animal> listOfAnimals;
 
 
     public Zoo() {
-        this.numberOfZones = 0;
-        this.numberOfAnimals = 0;
         this.listOfZones = new ArrayList<>();
         this.listOfAnimals = new ArrayList<>();
     }
-
-    public Integer getNumberOfZones() { return numberOfZones; }
-
-    public void setNumberOfZones(Integer numberOfZones) { this.numberOfZones = numberOfZones; }
-
-    public Integer getNumberOfAnimals() { return numberOfAnimals; }
-
-    public void setNumberOfAnimals(Integer numberOfAnimals) { this.numberOfAnimals = numberOfAnimals; }
 
     public List<Zone> getListOfZones() { return listOfZones; }
 
@@ -41,4 +31,21 @@ public class Zoo {
     public void addAnimal(Animal animal) {
         listOfAnimals.add(animal);
     }
+
+    public void updateAnimalZone(Animal animalToUpdate, Zone zoneToUpdate) {
+        for (Animal animal : this.listOfAnimals) {
+            if (animal.getSpecies() == animalToUpdate.getSpecies()
+                    && animal.getName() == animalToUpdate.getName()) {
+                animal.setZone(animalToUpdate.getZone());
+            }
+        }
+
+        for (Zone zone: this.listOfZones) {
+            if (zone.getName() == zoneToUpdate.getName()) {
+                zone.addAnimal(animalToUpdate);
+            }
+        }
+    }
+
+
 }

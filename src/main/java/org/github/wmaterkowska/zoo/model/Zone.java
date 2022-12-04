@@ -1,4 +1,6 @@
-package org.example.data;
+package org.github.wmaterkowska.zoo.model;
+
+import org.github.wmaterkowska.zoo.model.animals.Animal;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,11 @@
-package org.example.service;
+package org.github.wmaterkowska.zoo.service;
 
-import org.example.data.*;
+import org.github.wmaterkowska.zoo.model.animals.Animal;
+import org.github.wmaterkowska.zoo.model.animals.Elephant;
+import org.github.wmaterkowska.zoo.model.animals.Lion;
+import org.github.wmaterkowska.zoo.model.Zone;
+import org.github.wmaterkowska.zoo.model.Zoo;
+import org.github.wmaterkowska.zoo.model.animals.Rabbit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +23,9 @@ public class ZooService {
         Scanner newZoneNameInput = new Scanner(System.in);
         if (newZoneNameInput.hasNext()) {
             Zone newZone = new Zone(newZoneNameInput.next());
-            zoo.addZone(newZone);
+            this.zoo.addZone(newZone);
         }
-        newZoneNameInput.close();
+        // newZoneNameInput.close();
     }
 
     public void addAnimal() {
@@ -31,10 +36,20 @@ public class ZooService {
             String animalDataString = newAnimalInput.next();
             String[] animalData = animalDataString.split(",");
 
-            Lion newAnimal = new Lion(animalData[0], animalData[1]);
-            zoo.addAnimal(newAnimal);
+            Animal newAnimal;
+            if (animalData[0].equals("lion") ) {
+                newAnimal = new Lion(animalData[0], animalData[1]);
+            } else if (animalData[0].equals("elephant") ) {
+                newAnimal = new Elephant(animalData[0], animalData[1]);
+            } else if (animalData[0].equals("rabbit") ) {
+                newAnimal = new Rabbit(animalData[0], animalData[1]);
+            } else {
+                newAnimal = null;
+            }
+            this.zoo.addAnimal(newAnimal);
         }
-        newAnimalInput.close();}
+        // newAnimalInput.close();
+    }
 
 
     public List<Animal> getAnimalsWithoutZone() {
@@ -50,19 +65,21 @@ public class ZooService {
     }
 
     public void assignAnimalToZone() {
-
         Scanner animalZoneInput = new Scanner(System.in);
+
         if (animalZoneInput.hasNext()) {
             String animalZone = animalZoneInput.next();
 
         String[] animalZoneData = animalZone.split(",");
         Animal animalToAssign = new Animal(animalZoneData[0], animalZoneData[1]);
-
         Zone zoneToAddAnimal = new Zone(animalZoneData[2]);
+
         zoneToAddAnimal.addAnimal(animalToAssign);
         animalToAssign.setZone(zoneToAddAnimal);
+
+        zoo.updateAnimalZone(animalToAssign, zoneToAddAnimal);
         }
 
-        animalZoneInput.close();
+        // animalZoneInput.close();
     }
 }

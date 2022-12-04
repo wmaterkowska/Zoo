@@ -1,4 +1,4 @@
-package org.example.data;
+package org.github.wmaterkowska.zoo.model.animals;
 
 public class Elephant extends Animal implements feeding {
 

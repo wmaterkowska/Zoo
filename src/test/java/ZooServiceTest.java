@@ -1,8 +1,8 @@
-import org.example.data.Animal;
-import org.example.data.Lion;
-import org.example.data.Zone;
-import org.example.data.Zoo;
-import org.example.service.ZooService;
+import org.github.wmaterkowska.zoo.model.animals.Animal;
+import org.github.wmaterkowska.zoo.model.animals.Lion;
+import org.github.wmaterkowska.zoo.model.Zone;
+import org.github.wmaterkowska.zoo.model.Zoo;
+import org.github.wmaterkowska.zoo.service.ZooService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
 
 public class ZooServiceTest {
 
@@ -113,5 +112,7 @@ public class ZooServiceTest {
         Assert.assertEquals(zoo.getListOfAnimals().get(0).getZone(), testAnimal.getZone());
 
     }
+
+
 
 }

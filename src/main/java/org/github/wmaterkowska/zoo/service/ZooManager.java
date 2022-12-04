@@ -1,8 +1,8 @@
-package org.example.service;
+package org.github.wmaterkowska.zoo.service;
 
-import org.example.data.Animal;
-import org.example.data.Zone;
-import org.example.data.Zoo;
+import org.github.wmaterkowska.zoo.model.animals.Animal;
+import org.github.wmaterkowska.zoo.model.Zone;
+import org.github.wmaterkowska.zoo.model.Zoo;
 
 import java.util.List;
 import java.util.Scanner;
@@ -22,17 +22,17 @@ public class ZooManager {
     }
 
     public void getStateOfTheZoo() {
-        System.out.println("There are " + zoo.getNumberOfZones() + " zones at your Zoo.");
-        System.out.println("There are " + zoo.getNumberOfAnimals() + " animals at your Zoo,");
+        System.out.println("There are " + zoo.getListOfZones().size() + " zones at your Zoo.");
+        System.out.println("There are " + zoo.getListOfAnimals().size() + " animals at your Zoo,");
 
         List<Zone> zones = zoo.getListOfZones();
         if (zones == null || zones.isEmpty()) {
             System.out.println("you need zones and animals at your Zoo!");
             System.out.println();
         } else {
-            for (int nrOfZone = 0; nrOfZone <= zoo.getNumberOfZones(); nrOfZone++) {
+            for (int nrOfZone = 0; nrOfZone < zoo.getListOfZones().size(); nrOfZone++) {
                 System.out.println("where in: " + zones.get(nrOfZone).getName() + " zone, there are "
-                        + zones.get(nrOfZone).getListOfAnimals().size() + " animals:");
+                        + zones.get(nrOfZone).getListOfAnimals().size() + " animals");
                 for (Animal animal : zones.get(nrOfZone).getListOfAnimals()) {
                     System.out.println(animal.getSpecies() + " " + animal.getName());
                 }
@@ -42,6 +42,7 @@ public class ZooManager {
 
 
     private void printListOfChoices() {
+        System.out.println();
         System.out.println("If you want to add zone write '1'.");
         System.out.println("If you want to add animal write '2'.");
         System.out.println("If you want to check if all animals have assigned a zone write '3'");
@@ -51,26 +52,29 @@ public class ZooManager {
     }
 
     public void mangingTheZoo() {
-        printListOfChoices();
 
         Scanner input = new Scanner(System.in);
-        while (input.hasNextInt()) {
-            if (input.nextInt() == 1) {
+
+        while (true) {
+            printListOfChoices();
+            int choice = input.nextInt();
+
+            if (choice == 1) {
                 System.out.println("Write a name of a new zone:");
                 zooService.addZone();
                 System.out.println("The new zone was created.");
-            } else if (input.nextInt() == 2) {
+            } else if (choice == 2) {
                 System.out.println("Write a species and name of a new animal, for example: lion,Simba");
                 zooService.addAnimal();
                 System.out.println("You have new animal at the Zoo.");
-            } else if (input.nextInt() == 3) {
+            } else if (choice == 3) {
                 showAnimalsWithoutZone();
             } else if (input.nextInt() == 4) {
                 System.out.println("Write animal which you want to assign and the zone, eg. lion,Simba,savanna");
                 zooService.assignAnimalToZone();
-            } else if (input.nextInt() == 5 ) {
+            } else if (choice == 5 ) {
                 getStateOfTheZoo();
-            } else if (input.nextInt() == 6) {
+            } else if (choice == 6) {
                 break;
             } else {
                 System.out.println("Incorrect input");
@@ -78,7 +82,6 @@ public class ZooManager {
             }
         }
         input.close();
-
     }
 
     public void showAnimalsWithoutZone() {

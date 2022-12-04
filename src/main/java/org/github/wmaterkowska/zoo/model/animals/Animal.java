@@ -1,4 +1,6 @@
-package org.example.data;
+package org.github.wmaterkowska.zoo.model.animals;
+
+import org.github.wmaterkowska.zoo.model.Zone;
 
 public class Animal {
 
