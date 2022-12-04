@@ -1,6 +1,8 @@
 package org.github.wmaterkowska.zoo.model.animals;
 
-public class Elephant extends Animal implements feeding {
+import org.github.wmaterkowska.zoo.service.Feeding;
+
+public class Elephant extends Animal implements Feeding {
 
     public Elephant(String species, String name ) {
         super(species, name);

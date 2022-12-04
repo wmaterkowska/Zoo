@@ -1,6 +1,8 @@
 package org.github.wmaterkowska.zoo.model.animals;
 
-public class Lion extends Animal implements feeding {
+import org.github.wmaterkowska.zoo.service.Feeding;
+
+public class Lion extends Animal implements Feeding {
 
 
     public Lion(String species, String name) {

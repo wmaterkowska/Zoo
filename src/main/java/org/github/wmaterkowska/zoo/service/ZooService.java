@@ -1,15 +1,12 @@
 package org.github.wmaterkowska.zoo.service;
 
 import org.github.wmaterkowska.zoo.model.animals.Animal;
-import org.github.wmaterkowska.zoo.model.animals.Elephant;
-import org.github.wmaterkowska.zoo.model.animals.Lion;
 import org.github.wmaterkowska.zoo.model.Zone;
 import org.github.wmaterkowska.zoo.model.Zoo;
-import org.github.wmaterkowska.zoo.model.animals.Rabbit;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class ZooService {
     Zoo zoo;
@@ -18,68 +15,54 @@ public class ZooService {
         this.zoo = zoo;
     }
 
-    public void addZone() {
-
-        Scanner newZoneNameInput = new Scanner(System.in);
-        if (newZoneNameInput.hasNext()) {
-            Zone newZone = new Zone(newZoneNameInput.next());
-            this.zoo.addZone(newZone);
-        }
-        // newZoneNameInput.close();
+    public void addZone(Zone newZone) {
+        // TODO: check if zone exists, exception
+        this.zoo.addZone(newZone);
     }
 
-    public void addAnimal() {
+    public void addAnimal(Animal newAnimal) {
+        // TODO: check if animal exists, exception WrongStateExceprion
+        // throw new IllegalStateException("The animal already exists.");
 
-        Scanner newAnimalInput = new Scanner(System.in);
-
-        if (newAnimalInput.hasNext()) {
-            String animalDataString = newAnimalInput.next();
-            String[] animalData = animalDataString.split(",");
-
-            Animal newAnimal;
-            if (animalData[0].equals("lion") ) {
-                newAnimal = new Lion(animalData[0], animalData[1]);
-            } else if (animalData[0].equals("elephant") ) {
-                newAnimal = new Elephant(animalData[0], animalData[1]);
-            } else if (animalData[0].equals("rabbit") ) {
-                newAnimal = new Rabbit(animalData[0], animalData[1]);
-            } else {
-                newAnimal = null;
-            }
-            this.zoo.addAnimal(newAnimal);
-        }
-        // newAnimalInput.close();
+        this.zoo.addAnimal(newAnimal);
     }
 
 
     public List<Animal> getAnimalsWithoutZone() {
-        List<Animal> allAnimals = zoo.getListOfAnimals();
 
-        List<Animal> animalsWithoutZone = new ArrayList<>();
-        for (Animal animal: allAnimals) {
-            if (animal.getZone() == null) {
-                animalsWithoutZone.add(animal);
-            }
-        }
+        List<Animal> animalsWithoutZone = zoo.getListOfAnimals().stream()
+                .filter(a -> a.getZone() == null).collect(Collectors.toList());
+
         return animalsWithoutZone;
     }
 
-    public void assignAnimalToZone() {
-        Scanner animalZoneInput = new Scanner(System.in);
+    public void assignAnimalToZone(Animal animalToAssign, Zone zoneToAddAnimal) throws ExceededLimitOfFoodException {
 
-        if (animalZoneInput.hasNext()) {
-            String animalZone = animalZoneInput.next();
+        Animal foundAnimal = zoo.getListOfAnimals().stream()
+                .filter(a -> a.getSpecies().equals(animalToAssign.getSpecies()) && a.getName().equals(animalToAssign.getName()) )
+                .findFirst().orElseThrow(NoSuchElementException::new);
+        Zone foundZone = zoo.getListOfZones().stream()
+                .filter(z -> z.getName().equals(zoneToAddAnimal.getName())).findFirst().orElseThrow(NoSuchElementException::new);
 
-        String[] animalZoneData = animalZone.split(",");
-        Animal animalToAssign = new Animal(animalZoneData[0], animalZoneData[1]);
-        Zone zoneToAddAnimal = new Zone(animalZoneData[2]);
+        foundAnimal.setZone(foundZone);
+        foundZone.addAnimal(foundAnimal);
 
-        zoneToAddAnimal.addAnimal(animalToAssign);
-        animalToAssign.setZone(zoneToAddAnimal);
+    }
 
-        zoo.updateAnimalZone(animalToAssign, zoneToAddAnimal);
+    public void getAnimalsForZone(Zone zone) {
+        zone.getListOfAnimals();
+    }
+
+    public void getAnimalWithName(String name) {
+        for (Animal animal : zoo.getListOfAnimals())  {
+
         }
 
-        // animalZoneInput.close();
+    }
+
+    public void getRaportFeeding() {
+    }
+
+    public void getRaportAnimals() {
     }
 }

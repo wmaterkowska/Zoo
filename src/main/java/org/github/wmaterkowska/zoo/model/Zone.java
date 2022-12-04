@@ -1,6 +1,7 @@
 package org.github.wmaterkowska.zoo.model;
 
 import org.github.wmaterkowska.zoo.model.animals.Animal;
+import org.github.wmaterkowska.zoo.service.ExceededLimitOfFoodException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,20 +43,16 @@ public class Zone {
             return false;
 
         Zone zone = (Zone) obj;
-        if (zone.getName().equals(this.name)) {
-            return true;
-        }
-        return false;
+        return zone.getName().equals(this.name);
     }
 
 
-    public void addAnimal(Animal animal) {
-        this.amountOfFood += animal.getAmountOfFood();
-        if (this.amountOfFood <= maxAmountOfFood) {
+    public void addAnimal(Animal animal) throws ExceededLimitOfFoodException {
+        if (this.amountOfFood + animal.getAmountOfFood() <= maxAmountOfFood) {
+            this.amountOfFood += animal.getAmountOfFood();
             this.listOfAnimals.add(animal);
         } else {
-            System.out.println("PrzekroczonyLimitJedzeniaException");
+            throw new ExceededLimitOfFoodException("The maximum amount of food for this zone was exceeded.");
         }
-
     }
 }

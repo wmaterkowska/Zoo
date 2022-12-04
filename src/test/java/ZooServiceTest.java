@@ -1,17 +1,14 @@
 import org.github.wmaterkowska.zoo.model.animals.Animal;
+import org.github.wmaterkowska.zoo.model.animals.Elephant;
 import org.github.wmaterkowska.zoo.model.animals.Lion;
 import org.github.wmaterkowska.zoo.model.Zone;
 import org.github.wmaterkowska.zoo.model.Zoo;
+import org.github.wmaterkowska.zoo.model.animals.Rabbit;
+import org.github.wmaterkowska.zoo.service.ExceededLimitOfFoodException;
 import org.github.wmaterkowska.zoo.service.ZooService;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.testng.Assert;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,48 +19,17 @@ public class ZooServiceTest {
     Zoo zoo;
     ZooService zooService;
 
-    private final InputStream systemIn = System.in;
-    private final PrintStream systemOut = System.out;
-
-    private ByteArrayInputStream testIn;
-    private ByteArrayOutputStream testOut;
-
-    @Before
-    public void setUpOutput() {
-        testOut = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(testOut));
-    }
-
-    private void provideInput(String data) {
-        testIn = new ByteArrayInputStream(data.getBytes());
-        System.setIn(testIn);
-    }
-
-    private String getOutput() {
-        return testOut.toString();
-    }
-
-    @After
-    public void restoreSystemInputOutput() {
-        System.setIn(systemIn);
-        System.setOut(systemOut);
-    }
-
-
     @Test
     public void addZoneTest() {
         zoo = new Zoo();
         zooService = new ZooService(zoo);
 
-        String testString = "savanna";
-        provideInput(testString);
-
-        Zone testZone = new Zone(testString);
+        String testZoneName = "savanna";
+        Zone testZone = new Zone(testZoneName);
         List<Zone> testListOfZones = new ArrayList<>();
         testListOfZones.add(testZone);
 
-        zooService.addZone();
-
+        zooService.addZone(testZone);
         List<Zone> actualListOfZones = zoo.getListOfZones();
 
         Assert.assertEquals(actualListOfZones, testListOfZones);
@@ -75,27 +41,20 @@ public class ZooServiceTest {
         zoo = new Zoo();
         zooService = new ZooService(zoo);
 
-        String testString = "lion,Simba";
-        provideInput(testString);
-
         Animal testAnimal = new Lion("lion", "Simba");
         List<Animal> testListAnimals = new ArrayList<>();
         testListAnimals.add(testAnimal);
 
-        zooService.addAnimal();
-
+        zooService.addAnimal(testAnimal);
         List<Animal> actualListAnimals = zoo.getListOfAnimals();
 
         Assert.assertEquals(actualListAnimals, testListAnimals);
     }
 
     @Test
-    public void assignAnimalToZoneTest() {
+    public void assignAnimalToZoneTest() throws ExceededLimitOfFoodException {
         zoo = new Zoo();
         zooService = new ZooService(zoo);
-
-        String testString = "lion,Simba,savanna";
-        provideInput(testString);
 
         Zone testZone = new Zone("savanna");
         Animal testAnimal = new Lion("lion", "Simba");
@@ -105,14 +64,44 @@ public class ZooServiceTest {
         zoo.setListOfZones(asList(testZone));
         zoo.setListOfAnimals(asList(testAnimal));
 
-        zooService.assignAnimalToZone();
-
+        zooService.assignAnimalToZone(testAnimal, testZone);
 
         Assert.assertEquals(zoo.getListOfZones().get(0).getListOfAnimals(), testZone.getListOfAnimals());
         Assert.assertEquals(zoo.getListOfAnimals().get(0).getZone(), testAnimal.getZone());
 
     }
 
+    @Test
+    public void tooManyAnimalsInZoneTest() throws ExceededLimitOfFoodException {
+        zoo = new Zoo();
+        zooService = new ZooService(zoo);
+
+        Animal elephantDumbo = new Elephant("elephant", "Dumbo");
+        Animal elephantMambo = new Elephant("elephant", "Mambo");
+        Animal elephantRambo = new Elephant("elephant", "Rambo");
+
+        Animal lionSimba = new Lion("lion", "Simba");
+        Animal lionNala = new Lion("lion", "Nala");
+        Animal lionMufasa = new Lion("lion", "Mufasa");
+
+        Animal rabbitMicki = new Rabbit("rabbit", "Micki");
+        Animal rabbitRicki = new Rabbit("rabbit", "Ricki");
+        Animal rabbitKicki = new Rabbit("rabbit", "Kicki");
+
+        Zone zone = new Zone("forest");
+
+        zooService.assignAnimalToZone(elephantDumbo, zone);
+        zooService.assignAnimalToZone(elephantMambo, zone);
+        zooService.assignAnimalToZone(elephantRambo, zone);
+
+        zooService.assignAnimalToZone(lionSimba, zone);
+        zooService.assignAnimalToZone(lionNala, zone);
+        zooService.assignAnimalToZone(lionMufasa, zone);
+
+        zooService.assignAnimalToZone(rabbitMicki, zone);
+
+        Assert.assertThrows(ExceededLimitOfFoodException.class, () -> zooService.assignAnimalToZone(rabbitRicki, zone));
+    }
 
 
 }

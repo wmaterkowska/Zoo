@@ -27,24 +27,8 @@ public class Zoo {
         this.listOfZones.add(zone);
     }
 
-
     public void addAnimal(Animal animal) {
         listOfAnimals.add(animal);
-    }
-
-    public void updateAnimalZone(Animal animalToUpdate, Zone zoneToUpdate) {
-        for (Animal animal : this.listOfAnimals) {
-            if (animal.getSpecies() == animalToUpdate.getSpecies()
-                    && animal.getName() == animalToUpdate.getName()) {
-                animal.setZone(animalToUpdate.getZone());
-            }
-        }
-
-        for (Zone zone: this.listOfZones) {
-            if (zone.getName() == zoneToUpdate.getName()) {
-                zone.addAnimal(animalToUpdate);
-            }
-        }
     }
 
 
