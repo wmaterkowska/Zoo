@@ -1,15 +1,13 @@
 package org.github.wmaterkowska.zoo.service;
 
+import exceptions.ExceededLimitOfFoodException;
+import exceptions.ZoneAlreadyExistsException;
 import org.github.wmaterkowska.zoo.model.animals.Animal;
-import org.github.wmaterkowska.zoo.model.animals.Elephant;
-import org.github.wmaterkowska.zoo.model.animals.Lion;
 import org.github.wmaterkowska.zoo.model.Zone;
 import org.github.wmaterkowska.zoo.model.Zoo;
-import org.github.wmaterkowska.zoo.model.animals.Rabbit;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ZooService {
     Zoo zoo;
@@ -18,68 +16,80 @@ public class ZooService {
         this.zoo = zoo;
     }
 
-    public void addZone() {
-
-        Scanner newZoneNameInput = new Scanner(System.in);
-        if (newZoneNameInput.hasNext()) {
-            Zone newZone = new Zone(newZoneNameInput.next());
+    public void addZone(Zone newZone) throws ZoneAlreadyExistsException {
+        if (zoo.getListOfZones().contains(newZone)) {
+            throw new ZoneAlreadyExistsException("Zone " + newZone + " already exists.");
+        } else {
             this.zoo.addZone(newZone);
         }
-        // newZoneNameInput.close();
     }
 
-    public void addAnimal() {
+    public void addAnimal(Animal newAnimal) {
 
-        Scanner newAnimalInput = new Scanner(System.in);
-
-        if (newAnimalInput.hasNext()) {
-            String animalDataString = newAnimalInput.next();
-            String[] animalData = animalDataString.split(",");
-
-            Animal newAnimal;
-            if (animalData[0].equals("lion") ) {
-                newAnimal = new Lion(animalData[0], animalData[1]);
-            } else if (animalData[0].equals("elephant") ) {
-                newAnimal = new Elephant(animalData[0], animalData[1]);
-            } else if (animalData[0].equals("rabbit") ) {
-                newAnimal = new Rabbit(animalData[0], animalData[1]);
-            } else {
-                newAnimal = null;
-            }
+        if (zoo.getListOfAnimals().contains(newAnimal)) {
+            throw new IllegalStateException("Animal " + newAnimal + " already exists.");
+        } else {
             this.zoo.addAnimal(newAnimal);
         }
-        // newAnimalInput.close();
     }
 
-
     public List<Animal> getAnimalsWithoutZone() {
-        List<Animal> allAnimals = zoo.getListOfAnimals();
 
-        List<Animal> animalsWithoutZone = new ArrayList<>();
-        for (Animal animal: allAnimals) {
-            if (animal.getZone() == null) {
-                animalsWithoutZone.add(animal);
-            }
-        }
+        List<Animal> animalsWithoutZone = zoo.getListOfAnimals().stream()
+                .filter(a -> a.getZone() == null).collect(Collectors.toList());
+
         return animalsWithoutZone;
     }
 
-    public void assignAnimalToZone() {
-        Scanner animalZoneInput = new Scanner(System.in);
+    public void assignAnimalToZone(Animal animalToAssign, Zone zoneToAddAnimal) throws ExceededLimitOfFoodException {
 
-        if (animalZoneInput.hasNext()) {
-            String animalZone = animalZoneInput.next();
+        Animal foundAnimal = zoo.getListOfAnimals().stream()
+                .filter(a -> a.getSpecies().equals(animalToAssign.getSpecies()) && a.getName().equals(animalToAssign.getName()) )
+                .findFirst().orElseThrow(NoSuchElementException::new);
+        Zone foundZone = zoo.getListOfZones().stream()
+                .filter(z -> z.getName().equals(zoneToAddAnimal.getName())).findFirst().orElseThrow(NoSuchElementException::new);
 
-        String[] animalZoneData = animalZone.split(",");
-        Animal animalToAssign = new Animal(animalZoneData[0], animalZoneData[1]);
-        Zone zoneToAddAnimal = new Zone(animalZoneData[2]);
+        foundAnimal.setZone(foundZone);
+        foundZone.addAnimal(foundAnimal);
 
-        zoneToAddAnimal.addAnimal(animalToAssign);
-        animalToAssign.setZone(zoneToAddAnimal);
-
-        zoo.updateAnimalZone(animalToAssign, zoneToAddAnimal);
-        }
-
-        // animalZoneInput.close();
     }
+
+    public List<Animal> getAnimalsForZone(Zone zone) {
+        List<Animal> animalsOfTheZone = zone.getListOfAnimals();
+        return animalsOfTheZone;
+    }
+
+    public List<Animal> getAnimalWithName(String name) {
+        List<Animal> listOfAnimalsWithName = new ArrayList<>();
+
+        for (Animal animal : zoo.getListOfAnimals())  {
+            if (animal.getName().equals(name) ) {
+                listOfAnimalsWithName.add(animal);
+            }
+        }
+        return listOfAnimalsWithName;
+    }
+
+    public Zone getZoneWithMaxAmountOfFood() {
+        Map<Zone, Integer> mapZoneAmountOfFood = new HashMap<>();
+        for (Zone zone : zoo.getListOfZones()) {
+            mapZoneAmountOfFood.put(zone, zone.getAmountOfFood());
+        }
+        Integer maxAmount = mapZoneAmountOfFood.values().stream().max(Integer::compare).get();
+
+        return mapZoneAmountOfFood.entrySet().stream().filter(entry -> maxAmount.equals(entry.getValue()))
+                .map(Map.Entry::getKey).findFirst().get();
+    }
+
+    public Zone getZoneWIthMinAnimals() {
+        Map<Zone, Integer> mapZoneNumberOfAnimals = new HashMap<>();
+        for (Zone zone : zoo.getListOfZones()) {
+            mapZoneNumberOfAnimals.put(zone, zone.getListOfAnimals().size());
+        }
+        Integer minNUmber = mapZoneNumberOfAnimals.values().stream().min(Integer::compare).get();
+
+        return mapZoneNumberOfAnimals.entrySet().stream().filter(entry -> minNUmber.equals(entry.getValue()))
+                .map(Map.Entry::getKey).findFirst().get();
+    }
+
 }

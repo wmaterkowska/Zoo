@@ -1,19 +1,22 @@
 package org.github.wmaterkowska.zoo;
 
+import exceptions.UnknownSpeciesException;
+import exceptions.ZoneAlreadyExistsException;
 import org.github.wmaterkowska.zoo.model.Zoo;
-import org.github.wmaterkowska.zoo.service.ZooManager;
+import exceptions.ExceededLimitOfFoodException;
+import org.github.wmaterkowska.zoo.service.UserInteraction;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExceededLimitOfFoodException, ZoneAlreadyExistsException, UnknownSpeciesException {
 
         Zoo zoo = new Zoo();
-        ZooManager manager = new ZooManager(zoo);
+        UserInteraction interaction = new UserInteraction(zoo);
 
-        manager.welcome();
-        manager.getStateOfTheZoo();
-        manager.mangingTheZoo();
-        manager.getStateOfTheZoo();
+        interaction.welcome();
+        interaction.getStateOfTheZoo();
+        interaction.mangingTheZoo();
+        interaction.getStateOfTheZoo();
 
-        manager.goodBye();
+        interaction.goodBye();
     }
 }
