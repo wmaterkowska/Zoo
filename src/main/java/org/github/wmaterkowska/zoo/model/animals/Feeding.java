@@ -1,4 +1,4 @@
-package org.github.wmaterkowska.zoo.service;
+package org.github.wmaterkowska.zoo.model.animals;
 
 public interface Feeding {
 

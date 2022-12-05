@@ -45,7 +45,7 @@ public class InputParser {
                     throw new UnknownSpeciesException("Unknown species.");
                 }
             } else {
-                throw new IllegalStateException();
+                throw new IllegalArgumentException("Animal entry must have 2 fields.");
             }
         }
         return newAnimal;

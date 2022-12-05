@@ -1,7 +1,5 @@
 package org.github.wmaterkowska.zoo.model.animals;
 
-import org.github.wmaterkowska.zoo.service.Feeding;
-
 public class Rabbit extends Animal implements Feeding {
 
     public Rabbit(String species, String name) {

@@ -92,6 +92,17 @@ public class ZooServiceTest {
 
         Zone zone = new Zone("forest");
 
+        zoo.addZone(zone);
+        zoo.addAnimal(elephantDumbo);
+        zoo.addAnimal(elephantMambo);
+        zoo.addAnimal(elephantRambo);
+        zoo.addAnimal(lionSimba);
+        zoo.addAnimal(lionMufasa);
+        zoo.addAnimal(lionNala);
+        zoo.addAnimal(rabbitKicki);
+        zoo.addAnimal(rabbitRicki);
+        zoo.addAnimal(rabbitMicki);
+
         zooService.assignAnimalToZone(elephantDumbo, zone);
         zooService.assignAnimalToZone(elephantMambo, zone);
         zooService.assignAnimalToZone(elephantRambo, zone);
