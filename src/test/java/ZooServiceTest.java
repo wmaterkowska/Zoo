@@ -1,10 +1,11 @@
+import exceptions.ZoneAlreadyExistsException;
 import org.github.wmaterkowska.zoo.model.animals.Animal;
 import org.github.wmaterkowska.zoo.model.animals.Elephant;
 import org.github.wmaterkowska.zoo.model.animals.Lion;
 import org.github.wmaterkowska.zoo.model.Zone;
 import org.github.wmaterkowska.zoo.model.Zoo;
 import org.github.wmaterkowska.zoo.model.animals.Rabbit;
-import org.github.wmaterkowska.zoo.service.ExceededLimitOfFoodException;
+import exceptions.ExceededLimitOfFoodException;
 import org.github.wmaterkowska.zoo.service.ZooService;
 import org.junit.Test;
 import org.testng.Assert;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 
 public class ZooServiceTest {
 
@@ -20,7 +22,7 @@ public class ZooServiceTest {
     ZooService zooService;
 
     @Test
-    public void addZoneTest() {
+    public void addZoneTest() throws ZoneAlreadyExistsException {
         zoo = new Zoo();
         zooService = new ZooService(zoo);
 
@@ -102,6 +104,47 @@ public class ZooServiceTest {
 
         Assert.assertThrows(ExceededLimitOfFoodException.class, () -> zooService.assignAnimalToZone(rabbitRicki, zone));
     }
+
+
+    @Test
+    public void getZoneWIthMaxAmountOfFoodTest() throws ZoneAlreadyExistsException {
+        zoo = new Zoo();
+        zooService = new ZooService(zoo);
+
+        Zone zone1 = new Zone("savanna");
+        zone1.setAmountOfFood(80);
+
+        Zone zone2 = new Zone("forest");
+        zone2.setAmountOfFood(50);
+
+        zooService.addZone(zone1);
+        zooService.addZone(zone2);
+
+        assertEquals(zooService.getZoneWithMaxAmountOfFood(), zone1);
+    }
+
+
+    @Test
+    public void getZoneWithMinAnimalsTest() throws ExceededLimitOfFoodException, ZoneAlreadyExistsException {
+        zoo = new Zoo();
+        zooService = new ZooService(zoo);
+
+        Animal elephantDumbo = new Elephant("elephant", "Dumbo");
+        Animal elephantMambo = new Elephant("elephant", "Mambo");
+        Animal elephantRambo = new Elephant("elephant", "Rambo");
+
+        Zone zone1 = new Zone("savanna");
+        zone1.addAnimal(elephantDumbo);
+        zone1.addAnimal(elephantMambo);
+        Zone zone2 = new Zone("forest");
+        zone2.addAnimal(elephantRambo);
+
+        zooService.addZone(zone1);
+        zooService.addZone(zone2);
+
+        assertEquals(zooService.getZoneWIthMinAnimals(), zone2);
+    }
+
 
 
 }

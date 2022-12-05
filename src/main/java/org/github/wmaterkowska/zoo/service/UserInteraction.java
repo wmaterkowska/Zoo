@@ -1,5 +1,8 @@
 package org.github.wmaterkowska.zoo.service;
 
+import exceptions.ExceededLimitOfFoodException;
+import exceptions.UnknownSpeciesException;
+import exceptions.ZoneAlreadyExistsException;
 import org.github.wmaterkowska.zoo.model.animals.Animal;
 import org.github.wmaterkowska.zoo.model.Zone;
 import org.github.wmaterkowska.zoo.model.Zoo;
@@ -55,7 +58,7 @@ public class UserInteraction {
         System.out.println("If you want to exit write '0'.");
     }
 
-    public void mangingTheZoo() throws ExceededLimitOfFoodException {
+    public void mangingTheZoo() throws ExceededLimitOfFoodException, UnknownSpeciesException, ZoneAlreadyExistsException {
 
         Scanner input = new Scanner(System.in);
         InputParser parser = new InputParser();
@@ -75,7 +78,7 @@ public class UserInteraction {
             } else if (choice == 3) {
                 showAnimalsWithoutZone();
             } else if (choice == 4) {
-                System.out.println("Write animal which you want to assign and the zone, eg. lion,Simba");
+                System.out.println("Write animal which you want to assign, eg. lion,Simba");
                 Animal animalToAssign = parser.parseAnimal();
                 System.out.println("Write zone to which you want to assign the animal, eg. savanna");
                 Zone zoneToAddAnimal = parser.parseZone();
@@ -83,15 +86,19 @@ public class UserInteraction {
             } else if (choice == 5 ) {
                 getStateOfTheZoo();
             } else if (choice == 6 ) {
+                System.out.println("Write the name of the zone, for which you want to see animals.");
                 Zone zone = parser.parseZone();
-                zooService.getAnimalsForZone(zone);
+                System.out.println(zooService.getAnimalsForZone(zone));
             } else if (choice == 7 ) {
-                String name = parser.parseName();
-                zooService.getAnimalWithName(name);
+                System.out.println("Write the name of animal you want to find.");
+                String name = parser.parseNameOfAnimal();
+                System.out.println(zooService.getAnimalWithName(name));
             } else if (choice == 8 ) {
-                zooService.getRaportFeeding();
+                String nameOfTheZone = zooService.getZoneWithMaxAmountOfFood().getName();
+                System.out.println("The zone, which needs the most feed: " + nameOfTheZone + "." );
             } else if (choice == 9 ) {
-                zooService.getRaportAnimals();
+                String nameOfTheZone = zooService.getZoneWIthMinAnimals().getName();
+                System.out.println("the zone with the fewest animals: " + nameOfTheZone + ".");
             } else if (choice == 0) {
                 break;
             } else {
@@ -106,9 +113,9 @@ public class UserInteraction {
         List<Animal> animalsWithoutZone = zooService.getAnimalsWithoutZone();
 
         if (animalsWithoutZone.isEmpty()) {
-            System.out.println("All animals have assigned a zone.");
+            System.out.println("All animals have assigned zone.");
         } else {
-            System.out.println("Animals who does not have assigned a zone:");
+            System.out.println("Animals who does not have assigned zone:");
             for (Animal animal : animalsWithoutZone) {
                 System.out.println(animal.getSpecies() + " " + animal.getName());
             }
@@ -116,6 +123,7 @@ public class UserInteraction {
     }
 
     public void goodBye() {
+        System.out.println();
         System.out.println("You are leaving the Zoo. Good Bye.");
     }
 

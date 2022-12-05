@@ -1,4 +1,4 @@
-package org.github.wmaterkowska.zoo.service;
+package exceptions;
 
 public class ExceededLimitOfFoodException extends Exception{
     public ExceededLimitOfFoodException(String errorMessage) {

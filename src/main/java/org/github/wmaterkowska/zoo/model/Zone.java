@@ -1,7 +1,7 @@
 package org.github.wmaterkowska.zoo.model;
 
 import org.github.wmaterkowska.zoo.model.animals.Animal;
-import org.github.wmaterkowska.zoo.service.ExceededLimitOfFoodException;
+import exceptions.ExceededLimitOfFoodException;
 
 import java.util.ArrayList;
 import java.util.List;
