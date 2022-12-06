@@ -11,8 +11,12 @@ import java.util.Scanner;
 
 public class InputParser {
 
-    Scanner input;
+    private Scanner input;
 
+    /**
+     * Method to scan for user input for a zone (zone name) and create a new zone.
+     * @return Zone newZone
+     */
     public Zone parseZone() {
         input = new Scanner(System.in);
         Zone newZone;
@@ -26,6 +30,12 @@ public class InputParser {
     }
 
 
+    /**
+     * Method to scan for user input for an animal (animal species and name) and create a new animal. If the
+     * species given is unknown (different from: lion, elephant or rabbit), it throws an exception.
+     * @return Animal newAnimal
+     * @throws UnknownSpeciesException
+     */
     public Animal parseAnimal() throws UnknownSpeciesException {
         input = new Scanner(System.in);
 
@@ -52,6 +62,10 @@ public class InputParser {
     }
 
 
+    /**
+     * Method to scan for user input for a name of a searched animal.
+     * @return String nameOfAnimal
+     */
     public String parseNameOfAnimal() {
         input = new Scanner(System.in);
 

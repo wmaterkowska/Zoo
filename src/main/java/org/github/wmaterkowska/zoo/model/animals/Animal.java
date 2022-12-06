@@ -2,7 +2,7 @@ package org.github.wmaterkowska.zoo.model.animals;
 
 import org.github.wmaterkowska.zoo.model.Zone;
 
-public class Animal {
+public abstract class Animal implements Feeding {
 
     private String species;
     private String name;

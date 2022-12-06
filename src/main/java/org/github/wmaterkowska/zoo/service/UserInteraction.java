@@ -20,10 +20,17 @@ public class UserInteraction {
         this.zooService = new ZooService(zoo);
     }
 
+    /**
+     * Welcome message.
+     */
     public void welcome() {
         System.out.println("Welcome to your Zoo.");
     }
 
+    /**
+     * Method gives the state of the zoo: how many zones and how many animals is in the zoo,
+     * and which animal is in which zone.
+     */
     public void getStateOfTheZoo() {
         System.out.println("There are " + zoo.getListOfZones().size() + " zones at your Zoo.");
         System.out.println("There are " + zoo.getListOfAnimals().size() + " animals at your Zoo,");
@@ -44,6 +51,9 @@ public class UserInteraction {
     }
 
 
+    /**
+     * List od choices for user to manage the zoo.
+     */
     private void printListOfChoices() {
         System.out.println();
         System.out.println("If you want to add zone write '1'. ");
@@ -58,6 +68,13 @@ public class UserInteraction {
         System.out.println("If you want to exit write '0'.");
     }
 
+    /**
+     * Main method for managing the zoo. It checks the user choice what to do (based on the list) and calls
+     * the appropriate methods from ZooService Class.
+     * @throws ExceededLimitOfFoodException
+     * @throws UnknownSpeciesException
+     * @throws ZoneAlreadyExistsException
+     */
     public void mangingTheZoo() throws ExceededLimitOfFoodException, UnknownSpeciesException, ZoneAlreadyExistsException {
 
         Scanner input = new Scanner(System.in);
@@ -109,19 +126,27 @@ public class UserInteraction {
         input.close();
     }
 
-    public void showAnimalsWithoutZone() {
+    private void showAnimalsWithoutZone() {
         List<Animal> animalsWithoutZone = zooService.getAnimalsWithoutZone();
 
-        if (animalsWithoutZone.isEmpty()) {
-            System.out.println("All animals have assigned zone.");
+        if (zoo.getListOfAnimals().isEmpty()) {
+            System.out.println("There are no animals in your zoo.");
         } else {
-            System.out.println("Animals who does not have assigned zone:");
-            for (Animal animal : animalsWithoutZone) {
-                System.out.println(animal.getSpecies() + " " + animal.getName());
+
+            if (animalsWithoutZone.isEmpty()) {
+                System.out.println("All animals have assigned zone.");
+            } else {
+                System.out.println("Animals who does not have assigned zone:");
+                for (Animal animal : animalsWithoutZone) {
+                    System.out.println(animal.getSpecies() + " " + animal.getName());
+                }
             }
         }
     }
 
+    /**
+     * Goodbye message.
+     */
     public void goodBye() {
         System.out.println();
         System.out.println("You are leaving the Zoo. Good Bye.");
